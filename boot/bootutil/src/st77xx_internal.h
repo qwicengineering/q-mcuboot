@@ -36,34 +36,17 @@
 #define ST77XX_MADCTL_ML 0x10
 #define ST77XX_MADCTL_RGB 0x00
 
-#define ST77XX_RDID1        0xDA
-#define ST77XX_RDID2        0xDB
-#define ST77XX_RDID3        0xDC
-#define ST77XX_RDID4        0xDD
+#define ST77XX_RDID1 0xDA
+#define ST77XX_RDID2 0xDB
+#define ST77XX_RDID3 0xDC
+#define ST77XX_RDID4 0xDD
 
-
-#define ST77XX_PORCTRK      0xB2
-#define ST77XX_GCTRL        0xB7
-#define ST77XX_VCOMS        0xBB
-#define ST77XX_LCMCTRL      0xC0
-#define ST77XX_VDVVRHEN     0xC2
-#define ST77XX_VRHS         0xC3
-#define ST77XX_VDVS         0xC4
-#define ST77XX_FRCTRL2      0xC6
-#define ST77XX_PWCTRL1      0xD0
+#define ST77XX_RAMCTRL 0xB0
+#define ST77XX_RGBCTRL 0xB1
+#define ST77XX_DGMEN 0xBA
+#define ST77XX_VRHS 0xC3
 #define ST77XX_PVGAMCTRL    0xE0
 #define ST77XX_NVGAMCTRL    0xE1
-
-
-// Some ready-made 16-bit ('565') color settings:
-#define ST77XX_BLACK 0x0000
-#define ST77XX_WHITE 0xFFFF
-#define ST77XX_RED 0xF800
-#define ST77XX_GREEN 0x07E0
-#define ST77XX_BLUE 0x001F
-#define ST77XX_CYAN 0x07FF
-#define ST77XX_MAGENTA 0xF81F
-#define ST77XX_YELLOW 0xFFE0
-#define ST77XX_ORANGE 0xFC00
+#define ST77XX_CMD2EN       0xDF
 
 #endif // ST77XX_INTERNAL_H

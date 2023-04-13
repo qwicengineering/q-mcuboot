@@ -139,6 +139,7 @@ zephyr_library_sources(
   ${BOOT_DIR}/bootutil/src/swap_move.c
   ${BOOT_DIR}/bootutil/src/caps.c
   ${BOOT_DIR}/bootutil/src/lcd.c
+  ${BOOT_DIR}/bootutil/src/display.c
   )
 endif()
 

@@ -696,6 +696,17 @@ boot_swap_sectors(int idx, uint32_t sz, struct boot_loader_state *state,
     flash_area_close(fap_scratch);
 }
 
+__weak void swap_progress_update_disp(int percentage)
+{
+
+}
+
+void swap_progress_update(int current_sector, int total_num_sectors)
+{
+    int percentage = ((float)current_sector / (float)total_num_sectors) * 100.0f;
+    swap_progress_update_disp(percentage);
+}
+
 void
 swap_run(struct boot_loader_state *state, struct boot_status *bs,
          uint32_t copy_size)
@@ -703,6 +714,7 @@ swap_run(struct boot_loader_state *state, struct boot_status *bs,
     uint32_t sz;
     int first_sector_idx;
     int last_sector_idx;
+    int total_num_sectors = 0;
     uint32_t swap_idx;
     int last_idx_secondary_slot;
     uint32_t primary_slot_size;
@@ -742,6 +754,7 @@ swap_run(struct boot_loader_state *state, struct boot_status *bs,
         last_idx_secondary_slot++;
     }
 
+    total_num_sectors = last_sector_idx;
     swap_idx = 0;
     while (last_sector_idx >= 0) {
         sz = boot_copy_sz(state, last_sector_idx, &first_sector_idx);
@@ -749,6 +762,7 @@ swap_run(struct boot_loader_state *state, struct boot_status *bs,
             boot_swap_sectors(first_sector_idx, sz, state, bs);
         }
 
+        swap_progress_update(swap_idx, total_num_sectors);
         last_sector_idx = first_sector_idx - 1;
         swap_idx++;
     }
