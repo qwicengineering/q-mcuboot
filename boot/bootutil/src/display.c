@@ -29,11 +29,33 @@ typedef struct
 
 static dispData_t dispData;
 
+#define DISP_STATUS_BAR_BG          LCD_COLOR_RGB(0x03, 0x03, 0x03)
+#define DISP_STATUS_BAR_FG          LCD_COLOR_RGB(0xff, 0xff, 0xff)
+
 #define DISP_STATUS_BAR_STARTX      48
 #define DISP_STATUS_BAR_ENDX        198
 
 #define DISP_STATUS_BAR_STARTY      197
 #define DISP_STATUS_BAR_ENDY        210
+#define DISP_BEREND_WIDTH           5
+
+// a simple mask to round off the progress bar ends
+static uint8_t disp_barend[DISP_STATUS_BAR_ENDY - DISP_STATUS_BAR_STARTY][DISP_BEREND_WIDTH] =
+{
+    { 0x00, 0x00, 0x00, 0x00, 0x00, },
+    { 0xff, 0xff, 0x00, 0x00, 0x00, },
+    { 0xff, 0xff, 0xff, 0x00, 0x00, },
+    { 0xff, 0xff, 0xff, 0xff, 0x00, },
+    { 0xff, 0xff, 0xff, 0xff, 0x00, },
+    { 0xff, 0xff, 0xff, 0xff, 0xff, },
+    { 0xff, 0xff, 0xff, 0xff, 0xff, },
+    { 0xff, 0xff, 0xff, 0xff, 0xff, },
+    { 0xff, 0xff, 0xff, 0xff, 0x00, },
+    { 0xff, 0xff, 0xff, 0xff, 0x00, },
+    { 0xff, 0xff, 0xff, 0x00, 0x00, },
+    { 0xff, 0xff, 0x00, 0x00, 0x00, },
+    { 0x00, 0x00, 0x00, 0x00, 0x00, },
+};
 
 static void disp_show_logo()
 {
@@ -55,6 +77,29 @@ static void disp_show_logo()
     }
 }
 
+void disp_plot_progress(int x, int y)
+{
+    uint16_t color = DISP_STATUS_BAR_BG;
+    if (x < dispData.pxPercentage)
+    {
+        if (x >= (dispData.pxPercentage - DISP_BEREND_WIDTH))
+        {
+            int bex = x - dispData.pxPercentage + DISP_BEREND_WIDTH;
+            int bey = y - DISP_STATUS_BAR_STARTY;
+            // round off the leading edge of the moving progress bar
+            if (disp_barend[bey][bex])
+            {
+                color = DISP_STATUS_BAR_FG;
+            }
+        }
+        else
+        {
+            color = DISP_STATUS_BAR_FG;
+        }
+    }
+    lcd_plot(x, y, color);
+}
+
 void swap_progress_update_disp(int percentage)
 {
     disp_show_logo();
@@ -64,14 +109,32 @@ void swap_progress_update_disp(int percentage)
         dispData.pxPercentage = pxPercentage;
         for (int x = DISP_STATUS_BAR_STARTX; x < DISP_STATUS_BAR_ENDX; x++)
         {
-            uint16_t color = LCD_COLOR_RGB(0x03, 0x03, 0x03);
-            if (x < dispData.pxPercentage)
-            {
-                color = LCD_COLOR_RGB(0xff, 0xff, 0xff);
-            }
             for (int y = DISP_STATUS_BAR_STARTY; y < DISP_STATUS_BAR_ENDY; y++)
             {
-                lcd_plot(x, y, color);
+                int bex = x - DISP_STATUS_BAR_STARTX;
+                int bey = y - DISP_STATUS_BAR_STARTY;
+                if (bex < DISP_BEREND_WIDTH)
+                {
+                    // round off the start of the progress bar
+                    if (disp_barend[bey][DISP_BEREND_WIDTH - bex - 1])
+                    {
+                        disp_plot_progress(x, y);
+                    }
+                }
+                else if (x >= (DISP_STATUS_BAR_ENDX - DISP_BEREND_WIDTH))
+                {
+                    bex = x - DISP_STATUS_BAR_ENDX + DISP_BEREND_WIDTH;
+                    // round off the end of the progress bar
+                    if (disp_barend[bey][bex])
+                    {
+                        disp_plot_progress(x, y);
+                    }
+                }
+                else
+                {
+                    // show the meat of the progress bar
+                    disp_plot_progress(x, y);
+                }
             }
         }
         lcd_flush();
