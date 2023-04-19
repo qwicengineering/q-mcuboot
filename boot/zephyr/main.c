@@ -485,7 +485,7 @@ void main(void)
     os_heap_init();
 
     ZEPHYR_BOOT_LOG_START();
-
+    disp_init();
     (void)rc;
 
 #if (!defined(CONFIG_XTENSA) && DT_HAS_CHOSEN(zephyr_flash_controller))
