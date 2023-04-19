@@ -156,6 +156,8 @@ void lcd_init(void)
         .mosi_pin       = NRF_GPIO_PIN_MAP( 0, 9 ),
         .miso_pin       = NRFX_SPIM_PIN_NOT_USED,
         .ss_pin         = NRFX_SPIM_PIN_NOT_USED,
+        .skip_gpio_cfg  = false,
+        .skip_psel_cfg  = false,
         .frequency      = NRF_SPIM_FREQ_32M,
         .mode           = NRF_SPIM_MODE_0,
         .bit_order      = NRF_SPIM_BIT_ORDER_MSB_FIRST,
