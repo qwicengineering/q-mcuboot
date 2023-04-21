@@ -61,6 +61,7 @@ static void disp_show_logo()
 {
     if (dispData.logoShown == false)
     {
+        lcd_init();
         int xoffs = (lcd_width() - QLOGO_WIDTH) / 2;
         int yoffs = (lcd_height() - QLOGO_HEIGHT) / 3;
         dispData.logoShown = true;
@@ -144,5 +145,4 @@ void swap_progress_update_disp(int percentage)
 void disp_init()
 {
     dispData.pxPercentage = -1;
-    lcd_init();
 }

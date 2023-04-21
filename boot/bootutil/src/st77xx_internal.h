@@ -17,6 +17,7 @@
 
 #define ST77XX_INVOFF 0x20
 #define ST77XX_INVON 0x21
+#define ST77XX_GAMMA 0x26
 #define ST77XX_DISPOFF 0x28
 #define ST77XX_DISPON 0x29
 #define ST77XX_CASET 0x2A
@@ -48,5 +49,15 @@
 #define ST77XX_PVGAMCTRL    0xE0
 #define ST77XX_NVGAMCTRL    0xE1
 #define ST77XX_CMD2EN       0xDF
+
+
+#define ST77XX_PORCTRK      0xB2
+#define ST77XX_GCTRL        0xB7
+#define ST77XX_VCOMS        0xBB
+#define ST77XX_LCMCTRL      0xC0
+#define ST77XX_VDVVRHEN     0xC2
+#define ST77XX_VDVS         0xC4
+#define ST77XX_FRCTRL2      0xC6
+#define ST77XX_PWCTRL1      0xD0
 
 #endif // ST77XX_INTERNAL_H
