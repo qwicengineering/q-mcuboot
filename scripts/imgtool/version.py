@@ -22,7 +22,7 @@ header.
 """
 
 from collections import namedtuple
-import re
+import re, os
 
 SemiSemVersion = namedtuple('SemiSemVersion', ['major', 'minor', 'revision',
                                                'build'])
@@ -34,6 +34,22 @@ version_re = re.compile(
 def decode_version(text):
     """Decode the version string, which should be of the form maj.min.rev+build
     """
+    path=os.getcwd()
+    while True:
+        p = os.path.realpath(os.path.join(path, ".."))
+        if p == path:
+            break
+        path = p
+        filename = os.path.realpath(os.path.join(path, text))
+        try:
+            with open(filename, "r") as verfile:
+                for line in verfile:
+                    if "VERSION_STR" in line:
+                        text = line.split()[2].strip('\"')
+                        break
+                break
+        except FileNotFoundError:
+            pass
     m = version_re.match(text)
     if m:
         result = SemiSemVersion(
